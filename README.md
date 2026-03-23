@@ -1,2 +1,2 @@
 # guix-blixodus
-Packages by me
+Packages and services by me
