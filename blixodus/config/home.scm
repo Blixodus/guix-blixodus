@@ -6,7 +6,9 @@
 (define-public home-config
   (home-environment
    (packages (specifications->packages
-              (list "gcc-toolchain" "clang-toolchain"
+              (list "firefox" "signal-desktop" "steam"
+		    "gnome-tweaks" "gnome-shell-extension-appindicator"
+		    "gcc-toolchain" "clang-toolchain"
 		    "git"
 		    "font-iosevka-term-slab"
 		    "emacs"
