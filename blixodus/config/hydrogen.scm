@@ -32,7 +32,8 @@
 			       (name "fi_FI.utf8") (source "fi_FI"))
 			      %default-locale-definitions))
    (timezone "Europe/Paris")
-   (keyboard-layout (keyboard-layout "fi"))
+   (keyboard-layout (keyboard-layout "fi"
+				     #:options '("ctrl:nocaps")))
    (host-name "Hydrogen")
 
    ;; The list of user accounts ('root' is implicit).
@@ -47,27 +48,27 @@
    ;; Packages installed system-wide.  Users can also install packages
    ;; under their own account: use 'guix search KEYWORD' to search
    ;; for packages and 'guix install PACKAGE' to install a package.
-   (packages (append (list (specification->package "emacs")
-                           (specification->package "emacs-exwm")
-                           (specification->package
-                            "emacs-desktop-environment")
+   (packages (append (list ;(specification->package "emacs")
+                           ;(specification->package "emacs-exwm")
+                           ;(specification->package "emacs-desktop-environment")
 			   gnome-shell-extensions
                            gnome-shell-extension-appindicator
-                           gnome-tweaks)
+                           gnome-tweaks
+			   gnome
+			   )
                      %base-packages))
 
    ;; Below is the list of system services.  To search for available
    ;; services, run 'guix system search KEYWORD' in a terminal.
    (services
     (append (list (service gnome-desktop-service-type)
-                  (service xfce-desktop-service-type)
 		  (service bluetooth-service-type)
-					;(service fprintd-service-type)
+		  ;(service fprintd-service-type)
                   ;; To configure OpenSSH, pass an 'openssh-configuration'
                   ;; record as a second argument to 'service' below.
                   (service openssh-service-type)
                   (service cups-service-type)
-		  (service guix-home-service-type `(("atte" ,home-config)))
+		  ;(service guix-home-service-type `(("atte" ,home-config)))
                   (set-xorg-configuration
                    (xorg-configuration (keyboard-layout keyboard-layout))))
 
@@ -78,7 +79,8 @@
 						(guix-configuration
 						 (inherit config)
 						 (substitute-urls
-						  (append (list "https://substitutes.nonguix.org" "https://nonguix-proxy.ditigal.xyz")
+						  (append (list ;; "https://substitutes.nonguix.org"
+								"https://nonguix-proxy.ditigal.xyz")
 							  %default-substitute-urls))
 						 (authorized-keys
 						  (append (list (local-file "./files/nonguix-signing-key.pub"))
