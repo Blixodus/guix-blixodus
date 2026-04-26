@@ -85,9 +85,9 @@
 								"https://cache-cdn.guix.moe/")
 							  %default-substitute-urls))
 						 (authorized-keys
-						  (append (list (local-file "./files/guix-science-signing-key.pub")
-								(local-file "./files/nonguix-signing-key.pub")
-								(local-file "./files/guix-moe-signing-key.pub"))
+						  (append (list (local-file "./files/signing-key-guix-science.pub")
+								(local-file "./files/signing-key-nonguix.pub")
+								(local-file "./files/signing-key-guix-moe.pub"))
 							  %default-authorized-guix-keys)))))))
    
    (bootloader (bootloader-configuration

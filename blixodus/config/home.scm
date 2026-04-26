@@ -10,7 +10,7 @@
 		    "python" "python-lsp-server" "python-lsp-black" "python-numpy" "python-scipy" "python-matplotlib" "python-black" "python-black-macchiato"
 		    "typst" "tree-sitter-typst" "emacs-typst-ts-mode"
 		    "gcc-toolchain" "clang-toolchain" "rust" "rust-analyzer" "python-lsp-server"
-		    "git"
+		    "git" "gnupg"
 		    "font-iosevka-term-slab"
 		    "wmctrl" "emacs-ewmctrl"
 		    "tree-sitter-c" "tree-sitter-cpp" "tree-sitter-python" "tree-sitter-rust" "tree-sitter-latex"
