@@ -12,15 +12,19 @@
 (define-module (blixodus config hydrogen)
   #:use-module (gnu)
   #:use-module (gnu system locale)
-  #:use-module (gnu services authentication)
   #:use-module (gnu services guix)
+  #:use-module (gnu services authentication)
+  #:use-module (gnu services security-token)
+  #:use-module (gnu services cups)
+  #:use-module (gnu services desktop)
+  #:use-module (gnu services networking)
+  #:use-module (gnu services ssh)
+  #:use-module (gnu services xorg)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gnome-xyz)
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd)
   #:use-module (blixodus config home))
-
-(use-service-modules cups desktop networking ssh xorg)
 
 (define-public hydrogen-config
   (operating-system
@@ -33,8 +37,8 @@
 			      %default-locale-definitions))
    (timezone "Europe/Paris")
    (keyboard-layout (keyboard-layout "fi"
-				     #:options '("ctrl:nocaps")))
-   (host-name "Hydrogen")
+				     #:options '("ctrl:hyper_capscontrol")))
+   (host-name "hydrogen")
 
    ;; The list of user accounts ('root' is implicit).
    (users (cons* (user-account
@@ -48,14 +52,9 @@
    ;; Packages installed system-wide.  Users can also install packages
    ;; under their own account: use 'guix search KEYWORD' to search
    ;; for packages and 'guix install PACKAGE' to install a package.
-   (packages (append (list ;(specification->package "emacs")
-                           ;(specification->package "emacs-exwm")
-                           ;(specification->package "emacs-desktop-environment")
-			   gnome-shell-extensions
+   (packages (append (list gnome-shell-extensions
                            gnome-shell-extension-appindicator
-                           gnome-tweaks
-			   gnome
-			   )
+                           gnome-tweaks)
                      %base-packages))
 
    ;; Below is the list of system services.  To search for available
@@ -64,28 +63,33 @@
     (append (list (service gnome-desktop-service-type)
 		  (service bluetooth-service-type)
 		  ;(service fprintd-service-type)
+		  (service pcscd-service-type)
                   ;; To configure OpenSSH, pass an 'openssh-configuration'
                   ;; record as a second argument to 'service' below.
                   (service openssh-service-type)
                   (service cups-service-type)
-		  ;(service guix-home-service-type `(("atte" ,home-config)))
+		  (service guix-home-service-type `(("atte" ,home-config)))
                   (set-xorg-configuration
                    (xorg-configuration (keyboard-layout keyboard-layout))))
 
             ;; Append default desktop services, add nonguix substitutes
-            ;; server.
+            ;; server. (Replace with %desktop-services if removed)
             (modify-services %desktop-services
 			     (guix-service-type config =>
 						(guix-configuration
 						 (inherit config)
 						 (substitute-urls
-						  (append (list ;; "https://substitutes.nonguix.org"
-								"https://nonguix-proxy.ditigal.xyz")
+						  (append (list "https://guix.bordeaux.inria.fr"
+								;; "https://substitutes.nonguix.org"
+								"https://nonguix-proxy.ditigal.xyz"
+								"https://cache-cdn.guix.moe/")
 							  %default-substitute-urls))
 						 (authorized-keys
-						  (append (list (local-file "./files/nonguix-signing-key.pub"))
+						  (append (list (local-file "./files/guix-science-signing-key.pub")
+								(local-file "./files/nonguix-signing-key.pub")
+								(local-file "./files/guix-moe-signing-key.pub"))
 							  %default-authorized-guix-keys)))))))
-  
+   
    (bootloader (bootloader-configuration
 		(bootloader grub-efi-bootloader)
 		(targets (list "/boot/efi"))
@@ -93,7 +97,7 @@
   
    (mapped-devices (list (mapped-device
                           (source (uuid
-                                   "e0e007d7-0416-4c22-b42c-fcf4c24645ed"))
+                                   "79404010-ac74-4ca2-8931-5a1ac4ac3da8"))
                           (target "cryptroot")
                           (type luks-device-mapping))))
 
