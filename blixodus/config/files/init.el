@@ -8,30 +8,28 @@
 ;(display-time-mode t)
 
 ;; Use which-key everywhere
-(use-package which-key
-  :init (which-key-mode))
+;; (use-package which-key
+;;   :config (which-key-mode))
 
 ;; Org-mode configuration
 (use-package org
-  :ensure t
   :bind (("C-c o l" . 'org-store-link)
 	 ("C-c o a" . 'org-agenda)
 	 ("C-c o c" . 'org-capture))
-  :config
-  (setq org-directory      "~/org"
-	org-agenda-files   (list "~/org/" "~/org/dailies/")
-	org-log-done 'time)
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d)")
-	  (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
-	  (sequence "WAITING(w)" "|" "POSTPONE" "CANCELED(c)")))
-  (setq org-todo-keyword-faces
-	'(("STARTED" . "orange")
-	  ("WAITING" . "magenta")
-	  ("POSTPONE" . "blue"))))
+  :custom
+  (org-directory "~/org")
+  (org-agenda-files (list "~/org/" "~/org/dailies/"))
+  (org-log-done 'time)
+  (org-todo-keywords
+   '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d)")
+     (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+     (sequence "WAITING(w)" "|" "POSTPONE" "CANCELED(c)")))
+  (org-todo-keyword-faces
+   '(("STARTED" . "orange")
+     ("WAITING" . "magenta")
+     ("POSTPONE" . "blue"))))
 
 (use-package org-roam
-  :ensure t
   :bind (("C-c o r f" . 'org-roam-node-find)
 	 ("C-c o r l" . 'org-roam-node-insert)
 	 ("C-c o r c" . 'org-roam-capture)
@@ -45,27 +43,36 @@
 	 ("C-c o d d" . 'org-roam-dailies-goto-date)
 	 ("C-c o d n" . 'org-roam-dailies-goto-next-note)
 	 ("C-c o d p" . 'org-roam-dailies-goto-previous-note))
-  :config
-  (setq org-roam-directory (file-truename "~/org"))
-  (setq org-roam-dailies-directory "dailies")
-  (setq org-roam-dailies-capture-templates
-	'(("d" "default" entry
-	   "* %?"
-	   :target (file+head "%<%Y-%m-%d>.org"
-			      "#+title: %<%Y-%m-%d>\n"))))
-  (org-roam-db-autosync-mode))
+  :custom
+  (org-roam-directory (file-truename "~/org"))
+  (org-roam-dailies-directory "dailies")
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry
+      "* %?"
+      :target (file+head "%<%Y-%m-%d>.org"
+			 "#+title: %<%Y-%m-%d>\n"))))
+  (org-roam-db-autosync-mode t))
 
 
 ;; Set regex mode for re-builder to string
 (use-package re-builder
-  :config (setq reb-re-syntax 'string))
+  :custom (reb-re-syntax 'string))
 
 ;; Tree-sitter configuration automatically
 (use-package treesit-auto
   :config (global-treesit-auto-mode))
 
+(use-package eglot
+  :custom (eglot-autoshutdown t))
+
 (use-package yasnippet
   :init (yas-global-mode))
+(use-package yasnippet-snippets
+  :after yasnippet
+  :config (yas-reload-all))
+(use-package doom-snippets
+  :after yasnippet
+  :config (yas-reload-all))
 
 ;; Vertico configuration
 (use-package vertico
@@ -73,7 +80,11 @@
 (use-package marginalia
   :init (marginalia-mode))
 (use-package consult)
-(use-package embark)
+
+(use-package embark
+  :custom
+  (prefix-help-command #'embark-prefix-help-command))
+
 (use-package orderless
   :custom
   (completion-styles '(orderless basic))
@@ -83,7 +94,19 @@
 ;; Completion through company which provides an interface for
 ;; completions (eventually corfu some day)
 (use-package company
+  :config (setq company-backends '((company-capf :with company-yasnippet)))
   :init (global-company-mode))
+
+(add-hook 'eglot-managed-mode-hook
+	  (lambda ()
+            (add-to-list 'company-backends
+                         '(company-capf :with company-yasnippet))))
+
+;; (use-package corfu
+;;   :init (global-corfu-mode))
+
+
+
 
 (use-package magit)
 
