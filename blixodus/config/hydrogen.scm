@@ -28,7 +28,7 @@
 
 (define-public hydrogen-config
   (operating-system
-   (kernel linux)
+   (kernel linux-7.0)
    (initrd microcode-initrd)
    (firmware (list sof-firmware linux-firmware))
    (locale "en_US.utf8")

@@ -17,12 +17,13 @@
   #:use-module (guix download)
   #:use-module (guix build-system copy)
 
-  #:use-module (nonguix build-system binary))
+  #:use-module (nonguix build-system binary)
+  #:use-module (nonguix licenses))
 
 (define-public atostekid
   (package
    (name "atostekid")
-   (version "4.4.1.0")
+   (version "4.5.0.0")
    (source
     (origin
      (method url-fetch)
@@ -30,7 +31,7 @@
            "https://files.fineid.fi/download/atostek/";
            version "/linux/AtostekID_DEB_" version ".deb"))
      (sha256
-      (base32 "0ix69k74n720hbl55pl2dm0wx95rcf2x5lmc28pmmy9gpy4kvv3g"))))
+      (base32 "1r5kj1l9ii0rdwaaz6zhwc558620hqjwkgm34w5dv2vywa0fklhl"))))
    (build-system binary-build-system)
    (arguments
     `(#:install-plan
@@ -66,6 +67,8 @@
    (inputs (list qpdf botan-2 nss minizip pcsc-lite qtbase libdbusmenu-qt `(,gcc "lib")))
    (supported-systems '("x86_64-linux"))
    (home-page "https://dvv.fi/en/card-reader-software")
-   (synopsis "Finnish smart ID card software")
-   (description "Finnish smart ID card software from a .deb file.")
-   (license #f)))
+   (synopsis "Finnish smart ID card software.")
+   (description "Atostek ID is card reader software used with certificate cards issued
+by the Finnish Digital and Population Data Services Agency. This Guix
+package is a binary installation from a .deb archive.")
+   (license (nonfree (string-append "file://" (assoc-ref outputs "atostekid"))))))

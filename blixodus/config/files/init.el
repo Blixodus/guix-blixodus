@@ -1,7 +1,9 @@
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure nil)
 
-(setq display-line-numbers-type 'relative) 
+(setq display-line-numbers-type 'visual)
+(setq display-line-numbers-current-absolute nil)
+(setq display-line-numbers-major-tick 5)
 (global-display-line-numbers-mode)
 
 ;(display-battery-mode t)
@@ -10,6 +12,9 @@
 ;; Use which-key everywhere
 ;; (use-package which-key
 ;;   :config (which-key-mode))
+
+(use-package ultra-scroll
+  :config (ultra-scroll-mode 1))
 
 ;; Org-mode configuration
 (use-package org
@@ -108,7 +113,8 @@
 
 
 
-(use-package magit)
+(use-package magit
+  :bind ("H-g" . magit-status))
 
 ;; Paredit to work with lisp implementations
 (use-package paredit
@@ -137,7 +143,14 @@
 (use-package geiser-guile)
 
 ;; Guix package manager utility for Emacs
-(use-package guix)
+(use-package guix
+  :bind ("H-x" . 'guix))
+
+;; Make emacs follow light/dark mode specified by system
+(use-package auto-dark
+  :init (auto-dark-mode)
+  :custom
+  (auto-dark-themes '((modus-vivendi-tinted) (modus-operandi-tinted))))
 
 ;; Set font last to make sure it stays
 (put 'narrow-to-region 'disabled nil)
@@ -149,7 +162,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-enabled-themes '(modus-vivendi))
+ ;'(custom-enabled-themes '((modus-vivendi-tinted) (modus-operandi-tinted)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
