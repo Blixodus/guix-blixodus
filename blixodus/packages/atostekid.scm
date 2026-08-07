@@ -71,4 +71,4 @@
    (description "Atostek ID is card reader software used with certificate cards issued
 by the Finnish Digital and Population Data Services Agency. This Guix
 package is a binary installation from a .deb archive.")
-   (license (nonfree (string-append "file://" (assoc-ref outputs "atostekid"))))))
+   (license (nonfree "file:///usr/share/doc/atostekid/copyright"))))
